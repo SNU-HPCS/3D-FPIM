@@ -1,0 +1,8 @@
+-FlashPassVoltage (V): 4.5
+-FlashReadVoltage (V): 1
+
+-PrechargeVoltage: 0.2
+-LoadVoltage: 0.9
+-MaxCellReadCurrent: 50e-9
+-MinCellReadCurrent: 3.3e-9
+-InputDuration: 1e-9

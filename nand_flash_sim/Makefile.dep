@@ -1,0 +1,45 @@
+formula.o: formula.cpp formula.h Technology.h typedef.h constant.h
+FunctionUnit.o: FunctionUnit.cpp FunctionUnit.h
+Technology.o: Technology.cpp Technology.h typedef.h
+RowDecoder.o: RowDecoder.cpp RowDecoder.h FunctionUnit.h OutputDriver.h \
+ constant.h typedef.h formula.h Technology.h global.h InputParameter.h \
+ MemCell.h Wire.h SenseAmp.h
+PredecodeBlock.o: PredecodeBlock.cpp PredecodeBlock.h FunctionUnit.h \
+ RowDecoder.h OutputDriver.h constant.h typedef.h BasicDecoder.h \
+ formula.h Technology.h global.h InputParameter.h MemCell.h Wire.h \
+ SenseAmp.h
+CompleteDecoder.o: PredecodeBlock.cpp PredecodeBlock.h FunctionUnit.h \
+ RowDecoder.h OutputDriver.h constant.h typedef.h BasicDecoder.h \
+ formula.h Technology.h global.h InputParameter.h MemCell.h Wire.h \
+ SenseAmp.h RowDecoder.cpp RowDecoder.h
+InputParameter.o: InputParameter.cpp InputParameter.h typedef.h global.h \
+ Technology.h MemCell.h Wire.h SenseAmp.h FunctionUnit.h constant.h
+Result.o: Result.cpp Result.h FunctionUnit.h \
+ SubArray.h RowDecoder.h OutputDriver.h constant.h typedef.h Precharger.h \
+ SenseAmp.h PredecodeBlock.h BasicDecoder.h \
+ Wire.h global.h InputParameter.h Technology.h \
+ MemCell.h formula.h macros.h
+SubArray.o: SubArray.cpp SubArray.h FunctionUnit.h RowDecoder.h \
+ OutputDriver.h constant.h typedef.h Precharger.h SenseAmp.h \
+ formula.h Technology.h global.h InputParameter.h MemCell.h Wire.h
+BasicDecoder.o: BasicDecoder.cpp BasicDecoder.h FunctionUnit.h \
+ OutputDriver.h constant.h typedef.h formula.h Technology.h global.h \
+ InputParameter.h MemCell.h Wire.h SenseAmp.h
+Precharger.o: Precharger.cpp Precharger.h FunctionUnit.h OutputDriver.h \
+ constant.h typedef.h formula.h Technology.h global.h InputParameter.h \
+ MemCell.h Wire.h SenseAmp.h
+MemCell.o: MemCell.cpp MemCell.h typedef.h formula.h Technology.h \
+ constant.h global.h InputParameter.h Wire.h SenseAmp.h FunctionUnit.h \
+ macros.h
+SenseAmp.o: SenseAmp.cpp SenseAmp.h FunctionUnit.h formula.h Technology.h \
+ typedef.h constant.h global.h InputParameter.h MemCell.h Wire.h
+Wire.o: Wire.cpp Wire.h typedef.h SenseAmp.h FunctionUnit.h global.h \
+ InputParameter.h Technology.h MemCell.h formula.h constant.h
+main.o: main.cpp InputParameter.h typedef.h MemCell.h RowDecoder.h \
+ FunctionUnit.h OutputDriver.h constant.h Precharger.h SenseAmp.h \
+ Technology.h BasicDecoder.h PredecodeBlock.h SubArray.h \
+ Wire.h Result.h \
+ formula.h macros.h
+OutputDriver.o: OutputDriver.cpp OutputDriver.h FunctionUnit.h constant.h \
+ typedef.h global.h InputParameter.h Technology.h MemCell.h Wire.h \
+ SenseAmp.h formula.h
