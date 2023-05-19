@@ -39,7 +39,7 @@ The nand flash simulator requires setting three different files to configure the
 - Temperature (K): temperature in Kelvin
 
 #### [Used in PIM mode only]
-- Baseline: set to 1 for NR and set to 0 for SR
+- LPDecoder: set to 1 to enable the wordline reuse mechanisms
 - InputPrecision: bit precision of an input
 - capLoad: capacitance of the load capacitor
 
