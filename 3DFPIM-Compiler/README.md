@@ -52,6 +52,7 @@ $ make
 ```sh
 $ cd test
 $ make example-network.test
+$ export LD_LIBRARY_PATH=`pwd`/../src:$LD_LIBRARY_PATH
 $ ./exmaple-network.test
 ```
 
