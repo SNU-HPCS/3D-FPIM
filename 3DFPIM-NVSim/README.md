@@ -38,8 +38,8 @@ The nand flash simulator requires setting three different files to configure the
 - ReferenceReadLatency: reference read latency (for validation)
 - BitsPerCell: bit precision fo each cell
 
-### 3. Calculate file (ex. tech\_params/Calculate\_Example.py)
-- TEMPERATURE: target temperature in Kelvin
+### 3. Calculate file (ex. tech\_params/example.cfg)
+- TEMP: target temperature in Kelvin
 - STAIR\_LENGTH: the 2D length of each staircase
 - NUM\_STAIRS: this value is not the same as the number of stacks (multiple stacks can be connected to a single staircase)
 - Barrier\_width: barrier thickness of the wordline
@@ -52,18 +52,20 @@ The nand flash simulator requires setting three different files to configure the
 - H\_g: horizontal pitch between the strings  (refer to [50])
 - TRENCH\_WIDTH: distance between the source lines
 
+- epsilon\_\*: electric permittivity parameters
+- \*\_Resistivity: resistivity of the tungsten (wordline) and polysilicon channel
+
 Set the above parameters and run
 ```sh 
-$ python Calculate_Example.py
+$ python Calculate.py example.cfg
 ```
 
 ## [Run]
 ```sh 
-$ ./nand_sim target.cfg
+$ ./3DNAND_SIM target.cfg
 ```
 
 ## [Misc]
 
 We utilized HSPICE to extract performance, latency, and area parameters for an ADC and an switched integrator.
-These parameters are yet to be included in the current version.
-We'll soon include all the hardcoded parameters.
+Refer to the 3D-FPIM paper (Table II).
