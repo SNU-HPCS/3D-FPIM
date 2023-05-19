@@ -10,12 +10,22 @@ We added additional ADC aware retraining on top of the existing threshold-based 
 
 ## Setup
 
-### 1. Define network type and 
+### Define network and training parameters (constant.py)
 
-#### Configure the hardware parameters in the `src/common.h` file.
-- The width and height of an MVM unit.
-- The depth (i.e., The number of 3D stacked crossbar array in a single MVM unit.) of an MVM unit. 
-- The number of MVM units in a core.
-- The number of cores in a tile.
-- The number of tiles in a chip.
-- The size of register file in a core.
+- Set the network type in the config.py file (ResNet18, ResNet50, VGG16, VGG19)
+- Set the checkpoint path to store the trained network
+- Set the training or inference phase (BASELINEQUANT, FOLDINGBN, QACONV, INFERENCE)
+- Set hardware configurations
+  - GPU settings (or CPU)
+  - Batch size
+  - Calibration samples
+  - Training epochs
+- Set the bit-precision for the weight / bias / activation
+
+### Run the network
+
+## Citation
+
+[^1]: H. Lee et al., **3D-FPIM: An Extreme Energy-Efficient DNN Acceleration System Using 3D NAND Flash-Based In-Situ PIM Unit,** *2022 55th IEEE/ACM International Symposium on Microarchitecture (MICRO)*, 2022.
+[^2]: Jain, Sambhav, et al. "Trained quantization thresholds for accurate and efficient fixed-point inference of deep neural networks." Proceedings of Machine Learning and Systems 2 (2020).
+[^3]: https://github.com/PannenetsF/TQT

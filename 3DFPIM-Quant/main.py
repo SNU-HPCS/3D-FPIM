@@ -59,12 +59,7 @@ else:
 if cfg.MULTI_GPU:
     const.last_layer=[".module" + layer for layer in const.last_layer]
 
-# Load the pretrained data to the quantized network
-## CONFIG: bitwidths for (weight, bias, bn_weight, bn_bias, activation)
-# we assume QLC cell and use even and odd row for signed 5-bit
-# for bias, we use the whole array; therefore, we can use 128 rows to represent a single bias
-# 128 rows => 2**7 => 7 additional bits for bias
-qa_conv.config.config_network(qa_conv.config.Config(5, 12, 5))
+qa_conv.config.config_network(qa_conv.config.Config(cfg.WGT_BIT, cfg.BIAS_BIT, cfg.ACT_BIT))
 qa_conv.config.set_last(const.qnet, '', layer_list=const.last_layer)
 
 cfg.best_acc = 0
@@ -110,10 +105,7 @@ if cfg.MODE == cfg.MODE_TYPE.BASELINEQUANT:
     epoch_start = -1
     cfg.best_acc = 0
 
-    if "ResNet" in cfg.NETWORK:
-        epoch_end = 110
-    elif "VGG" in cfg.NETWORK:
-        epoch_end = 10
+    if "VGG" in cfg.NETWORK:
         # just a heuristic => we should normalize the weight for the VGG-like networks
         qa_conv.config.set_normalize(const.qnet, mode=False)
 
@@ -143,7 +135,7 @@ if cfg.MODE == cfg.MODE_TYPE.BASELINEQUANT:
     qa_conv.config.make_bn_freeze(const.qnet, mode=False, convert=False, show=False)
 
     scaler = torch.cuda.amp.GradScaler()
-    for epoch in range(epoch_start + 1, epoch_end):
+    for epoch in range(epoch_start + 1, cfg.epoch_end):
         scratch_train(const.qnet, epoch, scaler, optimizer1, scheduler1, optimizer2, scheduler2)
         valid(const.qnet, epoch, optimizer1, scheduler1, optimizer2, scheduler2, scaler, quantize=True, inference=False)
 else:
@@ -214,9 +206,8 @@ else:
         
 
         cfg.best_acc = 0  # reset best test accuracy
-        epoch_end = 20
         scaler = torch.cuda.amp.GradScaler()
-        for epoch in range(0, epoch_end):
+        for epoch in range(0, cfg.epoch_end):
             retrain(const.qnet, epoch, optimizer1, optimizer2, optimizer3, scheduler1, scheduler2, scheduler3, scaler)
             if optimizer1 is not None:
                 print(optimizer1.param_groups[0]['lr'], end=" ")

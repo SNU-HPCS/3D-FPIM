@@ -14,4 +14,5 @@ This repository includes three different source codes:
 If you have any questions or comments, please contact us via email.
 
 Hunjun Lee <hunjunlee7515@snu.ac.kr>
+
 Minseop Kim <minseop@snu.ac.kr>

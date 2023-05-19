@@ -282,12 +282,6 @@ def valid(net, epoch, optimizer1, scheduler1, optimizer2, scheduler2, scaler, in
 
 
         Path(cfg.CHECKPOINT_PATH + '/' + cfg.NETWORK).mkdir(parents=True, exist_ok=True)
-        #if not os.path.isdir('./checkpoint/'):
-        #    os.mkdir('./checkpoint/')
-        #if not os.path.isdir('./checkpoint/' + cfg.DIRNAME):
-        #    os.mkdir('./checkpoint/' + cfg.DIRNAME)
-        #if not os.path.isdir('./checkpoint/' + cfg.DIRNAME + '/' + cfg.NETWORK):
-        #    os.mkdir('./checkpoint/' + cfg.DIRNAME + '/' + cfg.NETWORK)
 
         if cfg.MODE == cfg.MODE_TYPE.BASELINEQUANT:
             if acc > cfg.best_acc:

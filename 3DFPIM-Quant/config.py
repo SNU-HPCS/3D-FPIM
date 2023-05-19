@@ -1,6 +1,7 @@
 import torch
 from enum import Enum
 
+best_acc = 0  # best test accuracy
 
 # set the target network (supports only 6 networks for now...)
 NETWORK_TYPES=["ResNet18", 
@@ -8,14 +9,12 @@ NETWORK_TYPES=["ResNet18",
                "VGG16", 
                "VGG19"]
 
-best_acc = 0  # best test accuracy
+#FIXME (for network type)
+TYPE= 0
+NETWORK=NETWORK_TYPES[TYPE]
 
 # FIXME (for chkpt path)
 CHECKPOINT_PATH='./checkpoint/imagenet'
-
-#FIXME (for network type)
-TYPE= 2
-NETWORK=NETWORK_TYPES[TYPE]
 
 # Mode setting
 class MODE_TYPE(Enum):
@@ -29,24 +28,31 @@ class MODE_TYPE(Enum):
     # inference qa_conv
     INFERENCE = 3
 
-# FIXME (for retraining mode)
+# FIXME
 MODE=MODE_TYPE.BASELINEQUANT
-#MODE=MODE_TYPE.FOLDINGBN
-#MODE=MODE_TYPE.QACONV
-#MODE=MODE_TYPE.INFERENCE
 
-# FIXME (for gpu and mini-batch settings)
+# FIXME
 MULTI_GPU=True
-#DEVICE_IDS=[2,3,4]
-DEVICE_IDS=[0,1]
-#DEVICE_IDS=[2,3,4,5,6]
-#DEVICE_IDS=[1,2,3,4,5,6,7]
+DEVICE_IDS=[0,1,2,3,4,5,6,7]
 GPU_ID=DEVICE_IDS[0]
+
+# FIXME (set the batch size)
 RETRAIN_BATCH=128
 TEST_BATCH=128
 
-# FIXME (for VGG-type calibration
+# FIXME (set how may samples to use to profile the initial threshold values)
 CALIB_BATCH=256
 
+# FIXME (set the epoch end)
+epoch_end = 110
+
+# FIXME: set the weight, bias, and activate bitwidth
+## CONFIG: bitwidths for (weight, bias, activation)
+# we assume QLC cell and use even and odd row for signed 5-bit
+# for bias, we use the whole array; therefore, we can use 128 rows to represent a single bias
+# 128 rows => 2**7 => 7 additional bits for bias
+WGT_BIT = 5
+BIAS_BIT = 12
+ACT_BIT = 5
 
 device = 'cuda:' + str(GPU_ID) if torch.cuda.is_available() else 'cpu'
