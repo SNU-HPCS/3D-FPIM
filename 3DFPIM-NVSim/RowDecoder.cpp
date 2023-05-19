@@ -147,7 +147,7 @@ void RowDecoder::CalculateLatency(double _rampInput) {
             double rampInputForDriver;
 
             resPullDown = CalculateOnResistance(widthNandN, NMOS, 
-                    inputParameter->temperature, *tech) * numNandInput;
+                    cell->temperature, *tech) * numNandInput;
             capLoad = capNandOutput + outputDriver.capInput[0];
             tr = resPullDown * capLoad;
             gm = CalculateTransconductance(widthNandN, NMOS, *tech);
@@ -175,7 +175,7 @@ void RowDecoder::CalculatePower() {
         } else {
             /* Leakage power */
             leakage += CalculateGateLeakage(NAND, numNandInput, widthNandN, widthNandP,
-                    inputParameter->temperature, *tech) * vdd;
+                    cell->temperature, *tech) * vdd;
             /* Dynamic energy */
             double capLoad = capNandOutput + outputDriver.capInput[0];
             readDynamicEnergy = capLoad * vdd * vdd;

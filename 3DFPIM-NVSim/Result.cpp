@@ -315,29 +315,29 @@ void Result::print() {
                 << abs(subarray->readLatency - inputParameter->referenceReadLatency) / inputParameter->referenceReadLatency * 100. << endl;
         cout << scientific;
         cout << "|--- SubArray Latency = " 
-                << subarray->readLatency << endl;
+                << subarray->readLatency * 1e9 << " ns" << endl;
 
         cout << "   |--- Decoding Latency = " 
-                << subarray->decoderLatency << endl;
+                << subarray->decoderLatency * 1e9 << " ns" << endl;
         cout << "       |--- Row Decoder Latency = " 
-                << subarray->completeDecoder.readLatency << endl;
+                << subarray->completeDecoder.readLatency * 1e9 << " ns" << endl;
         cout << "       |--- Select Latency = " 
-                << (subarray->selectDecoder.readLatency) << endl;
+                << (subarray->selectDecoder.readLatency) * 1e9 << " ns" << endl;
         cout << "   |--- Senseamp Latency = " 
-                << (subarray->senseAmp.readLatency) << endl;
+                << (subarray->senseAmp.readLatency) * 1e9 << " ns" << endl;
         cout << "   |--- Precharge Latency = " 
                 << (subarray->precharger.prechargeLatency +
-                    subarray->precharger.enableLatency) << endl;
+                    subarray->precharger.enableLatency) * 1e9 << " ns" << endl;
         cout << "       |--- Enable Latency = " 
-                << subarray->precharger.enableLatency << endl;
+                << subarray->precharger.enableLatency * 1e9 << " ns" << endl;
         cout << "   |--- Discharge Latency = " 
                 << MAX(MAX(subarray->precharger.dischargeLatency + 
                    subarray->precharger.enableLatency,
                    subarray->completeDecoder.dischargeLatency),
-                   subarray->selectDecoder.dischargeLatency) << endl;
-        cout << "      |--- Discharge Precharger = " << subarray->precharger.dischargeLatency + subarray->precharger.enableLatency << endl;
-        cout << "      |--- Discharge Complete Decoder = " << subarray->completeDecoder.dischargeLatency << endl;
-        cout << "      |--- Discharge Select Decoder = " << subarray->selectDecoder.dischargeLatency << endl;
+                   subarray->selectDecoder.dischargeLatency) * 1e9 << " ns" << endl;
+        cout << "      |--- Discharge Precharger = " << subarray->precharger.dischargeLatency + subarray->precharger.enableLatency * 1e9 << " ns" << endl;
+        cout << "      |--- Discharge Complete Decoder = " << subarray->completeDecoder.dischargeLatency * 1e9 << " ns" << endl;
+        cout << "      |--- Discharge Select Decoder = " << subarray->selectDecoder.dischargeLatency * 1e9 << " ns" << endl;
     }
     else {
         ////////////////////////////////////////////
@@ -348,7 +348,7 @@ void Result::print() {
         double selectDecoderLatency;
         double dacLatency;
         double prechargeLatency;
-        if(!inputParameter->baseline){
+        if(inputParameter->lpDecoder){
             rowDecoderShiftLatency = int(std::ceil((subarray->completeDecoder.readLatency) * CLOCK_FREQ));
         }
         else{
@@ -364,35 +364,20 @@ void Result::print() {
 
         prechargeLatency = int(std::ceil((subarray->precharger.prechargeLatency * CLOCK_FREQ))) * int(inputParameter->inputPrecision);
 
-        if(inputParameter->baseline){
-            cout << "Row Decoder Charge: " << rowDecoderInitLatency << std::endl;
-            cout << "Row Decoder Discharge: " << rowDecoderDischargeLatency << std::endl;
-        }
-        else{
-            cout << "Row Decoder Charge: " << rowDecoderShiftLatency << std::endl;
-        }
-        cout << "Cell Delay: " << cellDelay << std::endl;
-        cout << "Select Latency: " << selectDecoderLatency << std::endl;
-        cout << "DAC Latency: " << dacLatency << std::endl;
-        cout << "Precharge Latency: " << prechargeLatency << std::endl;
-
-        cout << "############### Per Comp. Latency ###############" << endl;
-        if(inputParameter->baseline) {
-            cout << "   |--- Init Encode Comp = " 
-                    << int(rowDecoderInitLatency + selectDecoderLatency + dacLatency + prechargeLatency + rowDecoderDischargeLatency) << endl;
+        if(!inputParameter->lpDecoder) {
+            cout << "   |--- Row Decoder Latency (NR) = " 
+                    << int(rowDecoderInitLatency + selectDecoderLatency + dacLatency + prechargeLatency + rowDecoderDischargeLatency) << " ns" << endl;
         }
         else {
-            cout << "   |--- Shift Encode Comp = " 
-                    << int(rowDecoderShiftLatency + selectDecoderLatency + dacLatency + prechargeLatency) << endl;
+            cout << "   |--- Row Decoder Latency (SR) = " 
+                    << int(rowDecoderShiftLatency + selectDecoderLatency + dacLatency + prechargeLatency) << " ns" << endl;
         }
-        cout << "   |--- No Encode Comp = " 
-                << int(selectDecoderLatency + dacLatency + prechargeLatency) << endl;
-        cout << "#################################################" << endl;
-        cout << "   |--- Cell Latency = " 
-                << int(cellDelay) << endl;
-        cout << "#################################################" << endl;
+        cout << "   |--- Row Decoder Latency (CR) = " 
+                << int(selectDecoderLatency + dacLatency + prechargeLatency) << " ns" << endl;
+        cout << "   |--- Capacitor Drive Latency = " 
+                << int(cellDelay) << " ns" << endl;
 
-        cout << scientific << "Power:" << endl;
+        cout << scientific << "Energy:" << endl;
 
         /////////////////// PRINT AGAIN /////////////////////////
         double rowDecoderInitEnergy;
@@ -402,12 +387,13 @@ void Result::print() {
         double prechargeEnergy;
         double currentEnergy;
         double leakage;
-        if(!inputParameter->baseline){
+        if(inputParameter->lpDecoder){
             rowDecoderInitEnergy = subarray->completeDecoder.readDynamicEnergy;
             rowDecoderShiftEnergy = subarray->completeDecoder.shiftEnergy;
             selectDecoderEnergy = subarray->selectDecoder.readDynamicEnergy * int(inputParameter->inputPrecision);
             senseAmpEnergy = subarray->capLoad.readDynamicEnergy;
             prechargeEnergy = subarray->precharger.readDynamicEnergy * int(inputParameter->inputPrecision);
+            // We manually scale the current energy considering the average input and weight value (conservative)
             currentEnergy = 0.25 * 0.25 * subarray->maxBitlineCurrent * prechargeLatency * CLOCK_PERIOD * cell->prechargeVoltage * subarray->numColumn;
             leakage = subarray->leakage;
         }
@@ -416,36 +402,26 @@ void Result::print() {
             selectDecoderEnergy = subarray->selectDecoder.readDynamicEnergy * int(inputParameter->inputPrecision);
             senseAmpEnergy = subarray->capLoad.readDynamicEnergy;
             prechargeEnergy = subarray->precharger.readDynamicEnergy * int(inputParameter->inputPrecision);
+            // We manually scale the current energy considering the average input and weight value (conservative)
             currentEnergy = 0.25 * 0.25 * subarray->maxBitlineCurrent * prechargeLatency * CLOCK_PERIOD * cell->prechargeVoltage * subarray->numColumn;
             leakage = subarray->leakage;
         }
 
-        if(inputParameter->baseline) {
-            cout << "init: " << rowDecoderInitEnergy << endl;
+        cout << "   |--- CELL + Others = "
+             << (prechargeEnergy + currentEnergy) * 1e12 << " fJ" << endl;
+        cout << "   |--- Load Capacitor = "
+             << senseAmpEnergy * 1e12 << " fJ" << endl;
+        if(!inputParameter->lpDecoder) {
+            cout << "   |---  Row Decoder Energy (NR) = "
+                 << (rowDecoderInitEnergy + selectDecoderEnergy) * 1e12 << " fJ" << endl;
         }
         else {
-            cout << "shift: " << rowDecoderShiftEnergy << endl;
+            cout << "   |--- Row Decoder Energy (SR) = "
+                 << (rowDecoderShiftEnergy + selectDecoderEnergy) * 1e12 << " fJ" << endl;
         }
-        cout << "select: " << selectDecoderEnergy << endl;
-        cout << "senseamp: " << senseAmpEnergy << endl;
-        cout << "precharge: " << prechargeEnergy << endl;
-        cout << "current: " << currentEnergy << endl;
-
-        cout << "############### Per Comp. Energy ################" << endl;
-
-        cout.precision(9);
-
-        cout << "CELL + Others = "
-             << (prechargeEnergy + currentEnergy) << endl;
-        cout << "Charge Cap = "
-             << senseAmpEnergy << endl;
-        cout << "Decoder NR = "
-             << (rowDecoderInitEnergy + selectDecoderEnergy) << endl;
-        cout << "Decoder CR = "
-             << selectDecoderEnergy << endl;
-        cout << "Decoder SR = "
-             << (rowDecoderShiftEnergy + selectDecoderEnergy) << endl;
-        cout << "Leakage = " << leakage << endl;
+        cout << "   |--- Row Decoder Energy (CR) = "
+             << selectDecoderEnergy * 1e12 << " fJ" << endl;
+        cout << "   |--- Leakage = " << leakage * 1e9 << " nW" << endl;
         cout << "#################################################" << endl;
     }
 }

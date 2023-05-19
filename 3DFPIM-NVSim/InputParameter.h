@@ -32,7 +32,6 @@ public:
     int processNode;                /* Process node (nm) */
     DeviceRoadmap deviceRoadmap;    /* ITRS roadmap: HP, LSTP, or LOP */
     string fileMemCell;             /* Input file name of memory cell type */
-    int temperature;                /* The ambient temperature, Unit: K */
     double maxDriverCurrent;        /* The maximum driving current that the wordline/bitline driver can provide */
     double readLatencyConstraint;   /* The allowed variation to the best read latency */
     double readDynamicEnergyConstraint;     /* The allowed variation to the best read dynamic energy */
@@ -74,7 +73,7 @@ public:
     bool pimMode;
 
     int inputPrecision;
-    bool baseline;
+    bool lpDecoder;
     double referenceReadLatency;
 };
 

@@ -164,7 +164,7 @@ void SenseAmp::CalculatePower() {
         /* Voltage sense amplifier */
         readDynamicEnergy += capLoad * tech->vdd * tech->vdd;
         double idleCurrent =  CalculateGateLeakage(INV, 1, W_SENSE_EN * tech->featureSize, 0,
-                inputParameter->temperature, *tech) * tech->vdd;
+                cell->temperature, *tech) * tech->vdd;
         leakage += idleCurrent * tech->vdd;
 
         readDynamicEnergy *= numColumn;

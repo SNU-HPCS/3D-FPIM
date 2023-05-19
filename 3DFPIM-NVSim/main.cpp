@@ -95,7 +95,7 @@ int main(int argc, char *argv[])
 
     cell = new MemCell();
     cell->ReadCellFromFile(inputParameter->fileMemCell);
-    cell->ReadDimensionFromFile("tech_params/cellDimension.cfg");
+    cell->ReadDimensionFromFile("tech_params/config/cellDimension.cfg");
 
     cell->PrintCell();
 
@@ -147,7 +147,7 @@ int main(int argc, char *argv[])
         /* refine local wire type */
         REFINE_LOCAL_WIRE_FORLOOP {
             localWire->Initialize(inputParameter->processNode, (WireType)localWireType,
-                    (WireRepeaterType)localWireRepeaterType, inputParameter->temperature,
+                    (WireRepeaterType)localWireRepeaterType, cell->temperature,
                     (bool)isLocalWireLowSwing);
             for (int i = 0; i < (int)full_exploration; i++) {
                 FILTER_PIM_MODE(i);
@@ -158,7 +158,7 @@ int main(int argc, char *argv[])
         /* refine global wire type */
         REFINE_GLOBAL_WIRE_FORLOOP {
             globalWire->Initialize(inputParameter->processNode, (WireType)globalWireType,
-                    (WireRepeaterType)globalWireRepeaterType, inputParameter->temperature,
+                    (WireRepeaterType)globalWireRepeaterType, cell->temperature,
                     (bool)isGlobalWireLowSwing);
             for (int i = 0; i < (int)full_exploration; i++) {
                 FILTER_PIM_MODE(i);

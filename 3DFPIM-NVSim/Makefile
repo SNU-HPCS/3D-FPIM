@@ -1,7 +1,7 @@
 # Non-volatile memory simulator
 # Pre-release version, r131
 
-target := nand_sim
+target := 3DNAND_SIM
 
 # define tool chain
 CXX := g++

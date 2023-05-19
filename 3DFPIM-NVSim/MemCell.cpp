@@ -58,6 +58,10 @@ void MemCell::ReadDimensionFromFile(const string & inputFile)
             sscanf(line, "-TrenchWidth: %lf", &trenchWidth);
             continue;
         }
+        if (!strncmp("-Temperature", line, strlen("-Temperature"))) {
+            sscanf(line, "-Temperature (K): %d", &temperature);
+            continue;
+        }
     }
 
     area = widthInSize * lengthInSize;

@@ -108,7 +108,7 @@ void BasicDecoder::CalculateLatency(double _rampInput) {
             double beta;    /* for horowitz calculation */
             double rampInputForDriver;
 
-            resPullDown = CalculateOnResistance(widthNandN, NMOS, inputParameter->temperature, *tech) * numNandInput;
+            resPullDown = CalculateOnResistance(widthNandN, NMOS, cell->temperature, *tech) * numNandInput;
             capLoad = capNandOutput + outputDriver.capInput[0];
             tr = resPullDown * capLoad;
             gm = CalculateTransconductance(widthNandN, NMOS, *tech);
@@ -138,7 +138,7 @@ void BasicDecoder::CalculatePower() {
         } else {
             /* Leakage power */
             leakage = CalculateGateLeakage(NAND, numNandInput, widthNandN, widthNandP,
-                    inputParameter->temperature, *tech) * vdd;
+                    cell->temperature, *tech) * vdd;
             leakage += outputDriver.leakage;
             leakage *= numNandGate;
             /* Dynamic energy */

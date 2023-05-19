@@ -142,7 +142,7 @@ void SubArray::Initialize(long long _numRow, long long _numColumn,
         capWordlineEnergy = 0;
     }
     else{
-        if(inputParameter->baseline){
+        if(!inputParameter->lpDecoder){
             capWordlineLatency = (numColumn / 4.) * (linesPerSLIT + 1) * (tech->flCapGc + tech->flCapOfGex * 2) +
                                          (numColumn / 4.) * (linesPerSLIT + 1) * tech->flCapOfGsd * 2 * miller_value;
             // for discharging, the miller value is set to 0
@@ -239,7 +239,7 @@ void SubArray::Initialize(long long _numRow, long long _numColumn,
         
     }
     else {
-        if(inputParameter->baseline) {
+        if(!inputParameter->lpDecoder) {
             double tau = resDecoderVerticalline * (capDecoderVerticalline / 2 + capStaircaseLatency + capWordlineLatency) +
                            resStaircase * (capStaircaseLatency / 2 + capWordlineLatency) + 
                            resWordline * capWordlineLatency / 2;
@@ -400,7 +400,7 @@ void SubArray::CalculateLatency(double _rampInput) {
                     senseAmp.readLatency;
         }
         else {
-            if(not inputParameter->baseline) {
+            if(inputParameter->lpDecoder) {
                 readLatency =
                         // precharging latency (driver latency + bitline driving latency)
                         precharger.prechargeLatency * int(inputParameter->inputPrecision) +
@@ -473,7 +473,7 @@ void SubArray::CalculatePower() {
                 completeDecoder.decodingDynamicEnergy;
         }
         else {
-            if(not inputParameter->baseline){
+            if(inputParameter->lpDecoder){
                 actualWordlinePassEnergy = completeDecoder.wlReadDynamicEnergy
                         / completeDecoder.vdd / completeDecoder.vdd
                         * cell->flashPassVoltage * cell->flashPassVoltage;

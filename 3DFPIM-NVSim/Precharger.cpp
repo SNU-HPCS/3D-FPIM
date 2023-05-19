@@ -127,7 +127,7 @@ void Precharger::CalculateLatency(double _rampInput){
         double beta;    /* for horowitz calculation */
         double temp;
         resPullDown = CalculateOnResistance(widthInvNmos, 
-                NMOS, inputParameter->temperature, *tech);
+                NMOS, cell->temperature, *tech);
         tr = resPullDown * capLoadInv;
         gm = CalculateTransconductance(widthInvNmos, NMOS, *tech);
         beta = 1 / (resPullDown * gm);
@@ -137,7 +137,7 @@ void Precharger::CalculateLatency(double _rampInput){
         dischargeLatency = 0;
         double resPullUp = CalculateOnResistance
                 (widthPMOSBitlinePrecharger, PMOS,
-                inputParameter->temperature, *tech);
+                cell->temperature, *tech);
         double tau_pre = resPullUp * (capBitline + 
                 capOutputBitlinePrecharger) + tau_precharge;
         double tau_dis = resPullUp * (capDischarge + 
@@ -159,10 +159,10 @@ void Precharger::CalculatePower() {
         leakage = outputDriver.leakage;
         leakage += numColumn * voltagePrecharge * 
                 CalculateGateLeakage(INV, 1, widthInvNmos, 
-                widthInvPmos, inputParameter->temperature, *tech);
+                widthInvPmos, cell->temperature, *tech);
         leakage += numColumn * voltagePrecharge * 
                 CalculateGateLeakage(INV, 1, 0, widthPMOSBitlinePrecharger,
-                inputParameter->temperature, *tech);
+                cell->temperature, *tech);
 
         /* Dynamic energy */
         /* We don't count bitline precharge energy into account because it is a charging process */

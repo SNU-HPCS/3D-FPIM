@@ -43,7 +43,7 @@ void OutputDriver::Initialize(double _logicEffort,
 
     vdd = normal ? tech->vdd : cell->flashPassVoltage;
 
-    double minNMOSDriverWidth = minDriverCurrent / tech->currentOnNmos[inputParameter->temperature - 300];
+    double minNMOSDriverWidth = minDriverCurrent / tech->currentOnNmos[cell->temperature - 300];
     minNMOSDriverWidth = MAX(MIN_NMOS_SIZE * tech->featureSize, minNMOSDriverWidth);
 
     if (minNMOSDriverWidth > inputParameter->maxNmosSize * tech->featureSize) {
@@ -201,7 +201,7 @@ void OutputDriver::CalculateLatency(double _rampInput) {
         double temp;
         readLatency = 0;
         for (int i = 0; i < numStage - 1; i++) {
-            resPullDown = CalculateOnResistance(widthNMOS[i], NMOS, inputParameter->temperature, *tech);
+            resPullDown = CalculateOnResistance(widthNMOS[i], NMOS, cell->temperature, *tech);
             capLoad = capOutput[i] + capInput[i+1];
             tr = resPullDown * capLoad;
             gm = CalculateTransconductance(widthNMOS[i], NMOS, *tech);
@@ -210,7 +210,7 @@ void OutputDriver::CalculateLatency(double _rampInput) {
             rampInput = temp;   /* for next stage */
         }
         /* Last level inverter */
-        resPullDown = CalculateOnResistance(widthNMOS[numStage-1], NMOS, inputParameter->temperature, *tech);
+        resPullDown = CalculateOnResistance(widthNMOS[numStage-1], NMOS, cell->temperature, *tech);
         tr = resPullDown * (capOutput[numStage-1] + outputCap) + outputTau;
         tr_dis = resPullDown * (capOutput[numStage-1] + outputCapDischarge) + outputTauDis;
         // outputLatencyCap * outputRes / 2;
@@ -231,7 +231,7 @@ void OutputDriver::CalculatePower() {
         /* Leakage power */
         leakage = 0;
         for (int i = 0; i < numStage; i++) {
-            leakage += CalculateGateLeakage(INV, 1, widthNMOS[i], widthPMOS[i], inputParameter->temperature, *tech)
+            leakage += CalculateGateLeakage(INV, 1, widthNMOS[i], widthPMOS[i], cell->temperature, *tech)
                     * vdd;
         }
         /* Dynamic energy */

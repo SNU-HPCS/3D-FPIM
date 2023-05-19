@@ -51,6 +51,7 @@ public:
     int numStairs;
     double stairLength;
     double trenchWidth;
+    int temperature;                /* The ambient temperature, Unit: K */
 };
 
 #endif /* MEMCELL_H_ */

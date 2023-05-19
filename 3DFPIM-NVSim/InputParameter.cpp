@@ -100,12 +100,10 @@ void InputParameter::ReadInputParameterFromFile(const std::string & inputFile) {
             sscanf(line, "-ProcessNode: %d", &processNode);
             continue;
         }
-        if (!strncmp("-Temperature", line, strlen("-Temperature"))) {
-            sscanf(line, "-Temperature (K): %d", &temperature);
-            continue;
-        }
         if (!strncmp("-PIMMode", line, strlen("-PIMMode"))) {
             sscanf(line, "-PIMMode: %d", &pimMode);
+            if(pimMode == 0)
+                lpDecoder = true;
             continue;
         }
 
@@ -313,8 +311,8 @@ void InputParameter::ReadInputParameterFromFile(const std::string & inputFile) {
             continue;
         }
 
-        if (!strncmp("-Baseline", line, strlen("-Baseline"))) {
-            sscanf(line, "-Baseline: %d", &baseline);
+        if (!strncmp("-LPDecoder", line, strlen("-LPDecoder"))) {
+            sscanf(line, "-LPDecoder: %d", &lpDecoder);
             continue;
         }
 

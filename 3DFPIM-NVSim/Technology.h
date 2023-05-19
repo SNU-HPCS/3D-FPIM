@@ -109,6 +109,7 @@ public:
     double trCD;
 
     double plCapOfGsd;
+
 };
 
 #endif /* TECHNOLOGY_H_ */

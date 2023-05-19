@@ -1310,7 +1310,7 @@ void Technology::Initialize(int _featureSizeInNano, DeviceRoadmap _deviceRoadmap
         }
     }
 
-    ReadTechParameterFromFile("tech_params/parasitic.cfg");
+    ReadTechParameterFromFile("tech_params/config/parasitic.cfg");
 
     initialized = true;
 }

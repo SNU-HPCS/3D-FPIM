@@ -27,12 +27,12 @@
         isBasicLowSwing = inputParameter->minIsLocalWireLowSwing; \
     else \
         isBasicLowSwing = false; \
-    localWire->Initialize(inputParameter->processNode, basicWireType, basicWireRepeaterType, inputParameter->temperature, isBasicLowSwing); \
-    selectlineWire->Initialize(inputParameter->processNode, selectline_wire, repeated_none, inputParameter->temperature, false); \
-    wordlineWire->Initialize(inputParameter->processNode, wordline_wire, repeated_none, inputParameter->temperature, false); \
-    contactWire->Initialize(inputParameter->processNode, contact_wire, repeated_none, inputParameter->temperature, false); \
-    stringWire->Initialize(inputParameter->processNode, string_wire, repeated_none, inputParameter->temperature, false); \
-    bitlineWire->Initialize(inputParameter->processNode, bitline_wire, repeated_none, inputParameter->temperature, false); \
+    localWire->Initialize(inputParameter->processNode, basicWireType, basicWireRepeaterType, cell->temperature, isBasicLowSwing); \
+    selectlineWire->Initialize(inputParameter->processNode, selectline_wire, repeated_none, cell->temperature, false); \
+    wordlineWire->Initialize(inputParameter->processNode, wordline_wire, repeated_none, cell->temperature, false); \
+    contactWire->Initialize(inputParameter->processNode, contact_wire, repeated_none, cell->temperature, false); \
+    stringWire->Initialize(inputParameter->processNode, string_wire, repeated_none, cell->temperature, false); \
+    bitlineWire->Initialize(inputParameter->processNode, bitline_wire, repeated_none, cell->temperature, false); \
     if (inputParameter->minGlobalWireType == inputParameter->maxGlobalWireType) \
         basicWireType = (WireType)inputParameter->minGlobalWireType; \
     else \
@@ -45,7 +45,7 @@
         isBasicLowSwing = inputParameter->minIsGlobalWireLowSwing; \
     else \
         isBasicLowSwing = false; \
-    globalWire->Initialize(inputParameter->processNode, basicWireType, basicWireRepeaterType, inputParameter->temperature, isBasicLowSwing); \
+    globalWire->Initialize(inputParameter->processNode, basicWireType, basicWireRepeaterType, cell->temperature, isBasicLowSwing); \
 }
 
 
@@ -68,13 +68,13 @@
 
 #define LOAD_GLOBAL_WIRE(oldResult) { \
     globalWire->Initialize(inputParameter->processNode, (oldResult).globalWire->wireType, (oldResult).globalWire->wireRepeaterType, \
-            inputParameter->temperature, (oldResult).globalWire->isLowSwing); \
+            cell->temperature, (oldResult).globalWire->isLowSwing); \
 }
 
 
 #define LOAD_LOCAL_WIRE(oldResult) \
     localWire->Initialize(inputParameter->processNode, (oldResult).localWire->wireType, (oldResult).localWire->wireRepeaterType, \
-            inputParameter->temperature, (oldResult).localWire->isLowSwing);
+            cell->temperature, (oldResult).localWire->isLowSwing);
 
 
 
