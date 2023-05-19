@@ -1,3 +1,12 @@
+## [Overview]
+
+This repository includes the circuit-level simulator for 3D-FPIM: An Extreme Energy-Efficient DNN Acceleration System Using 3D NAND Flash-Based In-Situ PIM Unit[^1].
+We modified NVSim[^2] and implemented 3D NAND Flash-specific parameters to obtain the 3D NAND Flash read latency.
+Also, we configure the simulator to enable a matrix-vectory-multiply operation and obtain the corresponding latency and energy consumption.
+Note that we configure the simulator to evaluate the latency for a "single subarray".
+
+
+
 ## [Compile]
 ```sh 
 $ make
@@ -69,3 +78,9 @@ $ ./3DNAND_SIM target.cfg
 
 We utilized HSPICE to extract performance, latency, and area parameters for an ADC and an switched integrator.
 Refer to the 3D-FPIM paper (Table II).
+
+
+## Citation
+
+[^1]: H. Lee et al., **3D-FPIM: An Extreme Energy-Efficient DNN Acceleration System Using 3D NAND Flash-Based In-Situ PIM Unit,** *2022 55th IEEE/ACM International Symposium on Microarchitecture (MICRO)*, 2022.
+[^2]: https://github.com/SEAL-UCSB/NVSim
