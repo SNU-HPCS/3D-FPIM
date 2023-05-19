@@ -23,6 +23,9 @@ We added additional ADC aware retraining on top of the existing threshold-based 
 - Set the bit-precision for the weight / bias / activation
 
 ### Run the network
+```sh 
+$ python main.py
+```
 
 ## Citation
 
